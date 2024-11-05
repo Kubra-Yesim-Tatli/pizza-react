@@ -1,9 +1,11 @@
 import { useState } from 'react'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css'
-
+const malzemeler = ["Pepperoni", "Kanada Jambonu", "Soğan", "Mısır", "Jalapeno", "Biber", "Ananas", "Sosis", "tavuk Izgara", "Domates", "Sucuk", "Sarımsak", "Kapak"];
+const boyutlar = ["Küçük", "Orta", "Büyük"];
+const hamurKalinliği =["İnce", "Orta", "Kalın"];
 function App() {
-  const [count, setCount] = useState(0)
+  
 
   return (
     <>
@@ -16,6 +18,10 @@ function App() {
         <button>Sipariş Oluştur</button>
       </div>
      </div>
+     <div>
+      <h2>Position Absolute Acı Pizza</h2>
+     </div>
+     
     </>
   )
 }
