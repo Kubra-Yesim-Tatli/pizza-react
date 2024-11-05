@@ -1,10 +1,8 @@
-import { useState } from 'react'
+
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css'
 import { Form, FormGroup, Input, Label } from 'reactstrap';
-const malzemeler = ["Pepperoni", "Kanada Jambonu", "Soğan", "Mısır", "Jalapeno", "Biber", "Ananas", "Sosis", "tavuk Izgara", "Domates", "Sucuk", "Sarımsak", "Kapak"];
-const boyutlar = ["Küçük", "Orta", "Büyük"];
-const hamurKalinliği =["İnce", "Orta", "Kalın"];
+
 function App() {
   
 
