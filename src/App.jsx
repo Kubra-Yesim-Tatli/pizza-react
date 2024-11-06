@@ -1,107 +1,124 @@
-
 import 'bootstrap/dist/css/bootstrap.min.css';
-import './App.css'
-import { Form, FormGroup, Input, Label } from 'reactstrap';
+import "./index.css";
+
+import { Button, Form, FormGroup, Input, Label, ButtonGroup } from 'reactstrap';
+import { useState } from 'react';
+
+const malzemeler = ["Pepperoni","Sosis", "Kanada Jambonu","Tavuk Izgara","Soğan","Domates", "Mısır", "Sucuk", "Jalepeno", "Sarımsak", "Biber", "Sucuk", "Ananas", "Kabak"];
+const boyutlar = ["küçük", "orta", "büyük"];
+const hamurSeç = ["ince", "orta", "kalın"];
 
 function App() {
-  
+  const [formData, setFormData] = useState({
+    boyut: "",
+    hamur: "",
+    malzeme: [],
+    not: ""
+  });
+  const [errors, setErrors] = useState({})
+  const [isValid, setIsValid] = useState (false);
 
+  const handleChange = (event) => {
+    const { name, id, type, value, checked } = event.target;
+    console.log("type, name, value, checked:", type, name, value, checked);
+
+    const initialErrorMessages = {
+      boyut: "Lütfen bir boyut seçin.",
+      hamur: "Lütfen bir hamur tipi seçin.",
+      malzeme: "En az beş malzeme seçmelisiniz."
+    };
+    
+    
+
+    if (type === "checkbox") {
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        malzeme: checked
+          ? [...prevFormData.malzeme, id]
+          : prevFormData.malzeme.filter((item) => item !== id)
+      }));
+    } else {
+      setFormData({ ...formData, [name]: value });
+    }
+  };
+ 
   return (
     <>
-     <div className='App'>
-      <header>
-        <div className='header-content'>
-          <h1>Teknolojik Yemekler</h1>
-          <p>
-            Anasayfa-Seçenekler - <strong>Sipariş Oluştur</strong>
-          </p>
-          <main>
-            <div className='container-lg'>
-              <h2>Position Absolute Acı Pizza</h2>
-              <div className="food-rank-price">
-                <h3>85.58TL</h3>
-                <p>85.58TL</p>
-                <p>(200)</p>
-              </div>
-              <div className="food-description">
-                <p>
-                  Frontent Dev olarak hala position: absolute kullanıyorsan bu çok acı pizza tam sana göre. Pizza, domates, peynir ve genellikle çeşitli diğer malzemelerle kaplanmış, daha sonra geleneksel olarak odun ateşinde bir fırında yüüksek sıcaklıkta pişirilen, genellikle yuvarlak, düzleştirilmiş mayalı buğday bazlı hamurdan oluşan italyan kökenli lezzetli bir yemektir.Küçük bir pizzaya bazen pizzeta denir.
-                </p>
-              </div>
-            </div>
-          </main>
+      <div className='orderpage'>
+        <header>
+          <div className='content-container'><img src='Assets/Iteration-1-assets/logo.svg' alt='Teknolojik Yemekler'/></div>
+          <div className='content-container'>
+          <button>Anasayfa</button>
+          <button>Sipariş Oluştur</button>
         </div>
-      </header>
- 
-     
-     </div>
-     
-<Form>
-  <FormGroup>
-    <input type='checkbox' name='pepperoni' id='pepperoni'></input>
-    <Label htmlFor='pepperoni'>Pepperoni</Label>
-  </FormGroup>
-  <FormGroup>
-    <input type='checkbox' name='tavuk' id='tavuk'></input>
-    <Label htmlFor='tavuk'>Tavuk Izgara </Label>
-  </FormGroup>
-  <FormGroup>
-    <input type='checkbox' name='soğan' id='soğan'></input>
-    <Label htmlFor='soğan'>Soğan</Label>
-  </FormGroup>
-  <FormGroup>
-    <input type='checkbox' name='mısır' id='mısır'></input>
-    <Label htmlFor='mısır'>Mısır</Label>
-  </FormGroup>
-  <FormGroup>
-    <input type='checkbox' name='sarımsak' id='sarımsak'></input>
-    <Label htmlFor='sarımsak'>Sarımsak</Label>
-  </FormGroup>
-  <FormGroup>
-    <input type='checkbox' name='sarımsak' id='sarımsak'></input>
-    <Label htmlFor='sarımsak'>Sarımsak</Label>
-  </FormGroup>
-  <FormGroup>
-    <input type='checkbox' name='ananas' id='ananas'></input>
-    <Label htmlFor='ananas'>Ananas</Label>
-  </FormGroup>
-  <FormGroup>
-    <input type='checkbox' name='sucuk' id='sucuk'></input>
-    <Label htmlFor='sucuk'>Sucuk</Label>
-  </FormGroup>
-  <FormGroup>
-    <input type='checkbox' name='sosis' id='sosis'></input>
-    <Label htmlFor='sosis'>Sosis</Label>
-  </FormGroup>
-  <FormGroup>
-    <input type='checkbox' name='biber' id='biber'></input>
-    <Label htmlFor='biber'>Biber</Label>
-  </FormGroup>
-  <FormGroup>
-    <input type='checkbox' name='kabak' id='kabak'></input>
-    <Label htmlFor='kabak'>kabak</Label>
-  </FormGroup>
-  <FormGroup>
-    <input type='checkbox' name='kanadaJambonu' id='kanadaJambonu'></input>
-    <Label htmlFor='kanadaJambonu'>Kanada Jambonu</Label>
-  </FormGroup>
-  <FormGroup>
-    <input type='checkbox' name='jalapeno' id='jalapeno'></input>
-    <Label htmlFor='jalapeno'>Jalapeno</Label>
-  </FormGroup>
- 
-</Form>
-<div className='flex column'>Sipariş Formu</div>
-<Form>
-<FormGroup tag="fieldset">
-<legend>
-      Boyut Seç
-    </legend>
-    
-</FormGroup>
-</Form>
+        </header>
+        
+      </div>
+      <div className='content-container'>
+        <h2>Position Absolute Acı Pizza</h2>
+        <div>
+          <p>85.50₺</p>
+          <p>4.9</p>
+          <p>(200)</p>
+        </div>
+        <div className='content-container'>Frontent Dev olarak hala position:absolute kullanıyorsan bu çok acı pizza tam sana göre. Pizza, domates, peynir ve genellikle çeşitli diğer malzemelerle kaplanmış, daha sonra geleneksel olarak odun ateşinde bir fırında yüksek sıcaklıkla pişirilen, genelikle yuvarlak, düzleştirilmiş mayalı buğday bazlı hamurdan oluşan İtalyan kökenli lezzetli bir yemektir. Küçük bir pizzaya bazen pizzetta denir</div>
+      </div>
+      <div>
+        <Form className='content-container'>
+          <Label htmlFor="boyut">Boyut Seç<span style={{color: "red"}}>*</span></Label>
+          {boyutlar.map((boyut, index) => (
+            <FormGroup key={index}>
+              <Input id={boyut} name="boyut" type="radio" onChange={handleChange} value={boyut} checked={formData.boyut === boyut} />
+              <Label htmlFor={boyut}>{boyut}</Label>
+            </FormGroup>
+          ))}
+        </Form>
+        <div className='content-container'>
+          <Label htmlFor="hamurlar">Hamur Seç<span style={{color: "red"}}>*</span></Label>
+          <Input type="select" name="hamur" onChange={handleChange} value={formData.hamur}>
+            {hamurSeç.map((hamur, index) => (
+              <option key={index} value={hamur}>{hamur}</option>
+            ))}
+          </Input>
+        </div>
+        <div className='content-container'>
+          {malzemeler.map((malz, index) => (
+            <FormGroup key={index}>
+              <Input id={malz} name="malzeme" type="checkbox" onChange={handleChange} checked={formData.malzeme.includes(malz)} />
+              <Label htmlFor={malz}>{malz}</Label>
+            </FormGroup>
+          ))}
+        </div>
+        <div className='content-container'>
+          <FormGroup>
+            <Label>Sipariş Notu</Label>
+            <Input name="not" type="textarea" placeholder="Siparişinize eklemek istediğiniz bir not var mı?" onChange={handleChange} value={formData.not} />
+          </FormGroup>
+        </div>
+        <div className='content-container'>
+          <ButtonGroup>
+            <Button>-</Button>
+            <Button>1</Button>
+            <Button>+</Button>
+          </ButtonGroup>
+
+          <div className='content-container'>
+            <h2>Sipariş Toplamı</h2>
+            <div className='content-container'>
+              <p>Seçimler</p>
+              <p>25</p>
+            </div>
+
+            <div className='content-container'>
+              <p>Toplam</p>
+              <p>110</p>
+            </div>
+          </div>
+          <Button>SİPARİŞ VER</Button>
+        </div>
+      </div>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
