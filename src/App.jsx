@@ -44,7 +44,7 @@ function App() {
  
   return (
     <>
-      <div className='orderpage'>
+      <div className='container-lg'>
         <header>
           <div className='content-container'><img src='Assets/Iteration-1-assets/logo.svg' alt='Teknolojik Yemekler'/></div>
           <div className='content-container'>
