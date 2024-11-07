@@ -2,9 +2,9 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import "./index.css";
 
 import { Button, Form, FormGroup, Input, Label, ButtonGroup } from 'reactstrap';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
-const malzemeler = ["Pepperoni","Sosis", "Kanada Jambonu","Tavuk Izgara","Soğan","Domates", "Mısır", "Sucuk", "Jalepeno", "Sarımsak", "Biber", "Sucuk", "Ananas", "Kabak"];
+const malzemeler = ["Pepperoni", "Sosis", "Kanada Jambonu", "Tavuk Izgara", "Soğan", "Domates", "Mısır", "Sucuk", "Jalepeno", "Sarımsak", "Biber", "Ananas", "Kabak"];
 const boyutlar = ["küçük", "orta", "büyük"];
 const hamurSeç = ["ince", "orta", "kalın"];
 
@@ -15,20 +15,11 @@ function App() {
     malzeme: [],
     not: ""
   });
-  const [errors, setErrors] = useState({})
-  const [isValid, setIsValid] = useState (false);
+  const [errors, setErrors] = useState({});
+  const [isValid, setIsValid] = useState(false);
 
   const handleChange = (event) => {
     const { name, id, type, value, checked } = event.target;
-    console.log("type, name, value, checked:", type, name, value, checked);
-
-    const initialErrorMessages = {
-      boyut: "Lütfen bir boyut seçin.",
-      hamur: "Lütfen bir hamur tipi seçin.",
-      malzeme: "En az beş malzeme seçmelisiniz."
-    };
-    
-    
 
     if (type === "checkbox") {
       setFormData((prevFormData) => ({
@@ -40,85 +31,147 @@ function App() {
     } else {
       setFormData({ ...formData, [name]: value });
     }
+
+    // Validasyon kontrolü
+    if (name === "boyut") {
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        boyut: value ? "" : "Bir boyut seçiniz"
+      }));
+    } else if (name === "hamur") {
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        hamur: value ? "" : "Bir hamur kalınlığı seçiniz"
+      }));
+    } else if (name === "malzeme") {
+      const updatedMalzemeList = checked
+        ? [...formData.malzeme, id]
+        : formData.malzeme.filter((item) => item !== id);
+      if (updatedMalzemeList.length < 4 || updatedMalzemeList.length > 10) {
+        setErrors((prevErrors) => ({
+          ...prevErrors,
+          malzeme: "En az 4 ve en fazla 10 adet malzeme seçiniz"
+        }));
+      } else {
+        setErrors((prevErrors) => ({ ...prevErrors, malzeme: "" }));
+      }
+    }
   };
- 
-  return (
-    <>
-      <div className='container-lg'>
-        <header>
-          <div className='content-container'><img src='Assets/Iteration-1-assets/logo.svg' alt='Teknolojik Yemekler'/></div>
-          <div className='content-container'>
-          <button>Anasayfa</button>
-          <button>Sipariş Oluştur</button>
-        </div>
-        </header>
-        
-      </div>
-      <div className='content-container'>
-        <h2>Position Absolute Acı Pizza</h2>
-        <div>
-          <p>85.50₺</p>
-          <p>4.9</p>
-          <p>(200)</p>
-        </div>
-        <div className='content-container'>Frontent Dev olarak hala position:absolute kullanıyorsan bu çok acı pizza tam sana göre. Pizza, domates, peynir ve genellikle çeşitli diğer malzemelerle kaplanmış, daha sonra geleneksel olarak odun ateşinde bir fırında yüksek sıcaklıkla pişirilen, genelikle yuvarlak, düzleştirilmiş mayalı buğday bazlı hamurdan oluşan İtalyan kökenli lezzetli bir yemektir. Küçük bir pizzaya bazen pizzetta denir</div>
-      </div>
-      <div>
-        <Form className='content-container'>
-          <Label htmlFor="boyut">Boyut Seç<span style={{color: "red"}}>*</span></Label>
-          {boyutlar.map((boyut, index) => (
-            <FormGroup key={index}>
-              <Input id={boyut} name="boyut" type="radio" onChange={handleChange} value={boyut} checked={formData.boyut === boyut} />
-              <Label htmlFor={boyut}>{boyut}</Label>
-            </FormGroup>
-          ))}
-        </Form>
-        <div className='content-container'>
-          <Label htmlFor="hamurlar">Hamur Seç<span style={{color: "red"}}>*</span></Label>
-          <Input type="select" name="hamur" onChange={handleChange} value={formData.hamur}>
-            {hamurSeç.map((hamur, index) => (
-              <option key={index} value={hamur}>{hamur}</option>
-            ))}
-          </Input>
-        </div>
-        <div className='content-container'>
-          {malzemeler.map((malz, index) => (
-            <FormGroup key={index}>
-              <Input id={malz} name="malzeme" type="checkbox" onChange={handleChange} checked={formData.malzeme.includes(malz)} />
-              <Label htmlFor={malz}>{malz}</Label>
-            </FormGroup>
-          ))}
-        </div>
-        <div className='content-container'>
-          <FormGroup>
-            <Label>Sipariş Notu</Label>
-            <Input name="not" type="textarea" placeholder="Siparişinize eklemek istediğiniz bir not var mı?" onChange={handleChange} value={formData.not} />
-          </FormGroup>
-        </div>
-        <div className='content-container'>
-          <ButtonGroup>
-            <Button>-</Button>
-            <Button>1</Button>
-            <Button>+</Button>
-          </ButtonGroup>
+useEffect(() => {
+  const isValidForm = formData.boyut && formData.hamur && formData.malzeme.length >= 4 && formData.malzeme.length <= 10 && !Object.values(errors).some((error) => error !== "");
+  setIsValid(isValidForm);
+}, [formData, errors]);
 
-          <div className='content-container'>
-            <h2>Sipariş Toplamı</h2>
-            <div className='content-container'>
-              <p>Seçimler</p>
-              <p>25</p>
-            </div>
+const handleSubmit = (event) => {
+  event.preventDefault();
+  if (!isValid) return;
 
-            <div className='content-container'>
-              <p>Toplam</p>
-              <p>110</p>
-            </div>
+  axios.post("https://reqres.in/api/pizza", formData)
+    .then((response) => {
+      setFormData({
+        boyut: "",
+        hamur: "",
+        malzeme: [],
+        not: ""
+      });
+      console.log(response.data);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+};
+
+return (
+  <>
+    <div className='App'>
+      <header>
+        <div className='content-lg'>
+          <div className='content-container'>
+            <img src='Assets/Iteration-1-assets/logo.svg' alt='Teknolojik Yemekler'/>
           </div>
-          <Button>SİPARİŞ VER</Button>
         </div>
-      </div>
-    </>
-  );
+        <div className='content-container'>
+          Anasayfa
+          Sipariş Oluştur
+        </div>
+      </header>
+      <main className='flex column gap-m main container'>
+        <div className='content-container'>
+          <h2>Position Absolute Acı Pizza</h2>
+          <div>
+            <p>85.50₺</p>
+            <p>4.9</p>
+            <p>(200)</p>
+          </div>
+          <div className='content-container'>
+            Frontend Dev olarak hala position:absolute kullanıyorsan bu çok acı pizza tam sana göre...
+          </div>
+        </div>
+        <div className='flex between'>
+          <div>
+            <Form className='content-container'>
+              <Label htmlFor="boyut">Boyut Seç<span style={{color: "red"}}>*</span></Label>
+              {boyutlar.map((boyut, index) => (
+                <FormGroup key={index}>
+                  <Input id={boyut} name="boyut" type="radio" onChange={handleChange} value={boyut} checked={formData.boyut === boyut} />
+                  <Label htmlFor={boyut}>{boyut}</Label>
+                </FormGroup>
+              ))}
+              {errors.boyut && <p className="error-message">{errors.boyut}</p>}
+            </Form>
+          </div>
+          <div className='content-container'>
+            <div className='flex column'></div>
+            <Label htmlFor="hamurlar">Hamur Seç<span style={{color: "red"}}>*</span></Label>
+            <Input type="select" name="hamur" onChange={handleChange} value={formData.hamur}>
+              <option value="">Seçiniz</option>
+              {hamurSeç.map((hamur, index) => (
+                <option key={index} value={hamur}>{hamur}</option>
+              ))}
+            </Input>
+            {errors.hamur && <p className="error-message">{errors.hamur}</p>}
+          </div>
+          <div className='content-container'>
+            {malzemeler.map((malz, index) => (
+              <FormGroup key={index}>
+                <Input id={malz} name="malzeme" type="checkbox" onChange={handleChange} checked={formData.malzeme.includes(malz)} />
+                <Label htmlFor={malz}>{malz}</Label>
+              </FormGroup>
+            ))}
+            {errors.malzeme && <p className="error-message">{errors.malzeme}</p>}
+          </div>
+          <div className='content-container'>
+            <FormGroup>
+              <Label>Sipariş Notu</Label>
+              <Input name="not" type="textarea" placeholder="Siparişinize eklemek istediğiniz bir not var mı?" onChange={handleChange} value={formData.not} />
+            </FormGroup>
+          </div>
+          <div className='flex between'>
+            <ButtonGroup>
+              <Button>-</Button>
+              <Button>1</Button>
+              <Button>+</Button>
+            </ButtonGroup>
+
+            <div className='content-container'>
+              <h2>Sipariş Toplamı</h2>
+              <div className='content-container'>
+                <p>Seçimler</p>
+                <p>25</p>
+              </div>
+
+              <div className='content-container'>
+                <p>Toplam</p>
+                <p>110</p>
+              </div>
+            </div>
+            <Button onClick={handleSubmit} disabled={!isValid}>SİPARİŞ VER</Button>
+          </div>
+        </div>
+      </main>
+    </div>
+  </>
+);
 }
 
 export default App;
