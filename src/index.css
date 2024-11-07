@@ -15,3 +15,17 @@ header.img {
   display: block;
   margin: 1rem auto;
 }
+.grid-container {
+  display: grid;
+  grid-template-columns: auto auto auto;
+  
+  padding: 0.3px;
+
+}
+.grid-item {
+  
+  
+  padding: 0.5px;
+  font-size: 15px;
+  text-align: center;
+}

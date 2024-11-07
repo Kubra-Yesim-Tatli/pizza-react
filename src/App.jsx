@@ -106,17 +106,21 @@ return (
       </header>
       <main className='flex column gap-m main container'>
         <div className='content-container'>
+          <div class="grid-container">
           <h2>Position Absolute Acı Pizza</h2>
           <div>
-            <p>85.50₺</p>
-            <p>4.9</p>
-            <p>(200)</p>
+          <div class="grid-item">85.50₺</div>
+          <div class="grid-item">4.9</div>
+          <div class="grid-item">200</div>
+          </div>
+          </div>
           </div>
           <div className='content-container'>
             Frontend Dev olarak hala position:absolute kullanıyorsan bu çok acı pizza tam sana göre...
-          </div>
+          
         </div>
         <div className='flex between'>
+          
           <div>
             <Form className='content-container'>
               <Label htmlFor="boyut">Boyut Seç<span style={{color: "red"}}>*</span></Label>
