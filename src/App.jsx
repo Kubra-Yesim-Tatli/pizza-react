@@ -9,6 +9,15 @@ const boyutlar = ["küçük", "orta", "büyük"];
 const hamurSeç = ["ince", "orta", "kalın"];
 
 function App() {
+  const [quantity, setQuantity] = useState(1);
+
+  const increaseQuantity = () => {
+    setQuantity((prevQuantity) => prevQuantity + 1);
+  };
+
+  const decreaseQuantity = () => {
+    setQuantity((prevQuantity) => (prevQuantity > 1 ? prevQuantity - 1 : 1));
+  };
   const [formData, setFormData] = useState({
     boyut: "",
     hamur: "",
@@ -148,9 +157,9 @@ return (
           </div>
           <div className='flex between'>
             <ButtonGroup>
-              <Button>-</Button>
-              <Button>1</Button>
-              <Button>+</Button>
+            <Button onClick={decreaseQuantity}>-</Button>
+              <Button disabled>{quantity}</Button>
+              <Button onClick={increaseQuantity}>+</Button>
             </ButtonGroup>
 
             <div className='content-container'>
