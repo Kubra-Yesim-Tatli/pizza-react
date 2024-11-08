@@ -7,9 +7,16 @@ import { useState, useEffect } from 'react';
 const malzemeler = ["Pepperoni", "Sosis", "Kanada Jambonu", "Tavuk Izgara", "Soğan", "Domates", "Mısır", "Sucuk", "Jalepeno", "Sarımsak", "Biber", "Ananas", "Kabak"];
 const boyutlar = ["küçük", "orta", "büyük"];
 const hamurSeç = ["ince", "orta", "kalın"];
+const malzemeFiyati = 5;
+const boyutFiyatlar = {
+  küçük: 50,
+  orta: 75,
+  büyük: 100
+};
 
 function App() {
   const [quantity, setQuantity] = useState(1);
+  const [totalPrice, setTotalPrice] = useState(0);
 
   const increaseQuantity = () => {
     setQuantity((prevQuantity) => prevQuantity + 1);
@@ -66,6 +73,15 @@ function App() {
       }
     }
   };
+  useEffect(() => {
+    let price = 0;
+     price += formData.malzeme.length * malzemeFiyati;
+      price *= quantity;
+  
+    setTotalPrice(price);
+  }, [formData, quantity]);
+
+
 useEffect(() => {
   const isValidForm = formData.boyut && formData.hamur && formData.malzeme.length >= 4 && formData.malzeme.length <= 10 && !Object.values(errors).some((error) => error !== "");
   setIsValid(isValidForm);
@@ -170,14 +186,15 @@ return (
               <h2>Sipariş Toplamı</h2>
               <div className='content-container'>
                 <p>Seçimler</p>
-                <p>25</p>
-              </div>
+           
+           <p>{formData.malzeme.length > 0 && `Malzemeler: ${formData.malzeme.join(", ")}`}</p>
+           </div>
 
-              <div className='content-container'>
-                <p>Toplam</p>
-                <p>110</p>
-              </div>
-            </div>
+           <div className='content-container'>
+           <p>Toplam Fiyat</p>
+            <p>{totalPrice}₺</p>
+         </div>
+      </div>
             <Button onClick={handleSubmit} disabled={!isValid}>SİPARİŞ VER</Button>
           </div>
         </div>
