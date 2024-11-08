@@ -1,7 +1,7 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import "./index.css";
 
-import { Button, Form, FormGroup, Input, Label, ButtonGroup } from 'reactstrap';
+import { Button, Form, FormGroup, Input, Label, ButtonGroup, Container, Col, Row } from 'reactstrap';
 import { useState, useEffect } from 'react';
 
 const malzemeler = ["Pepperoni", "Sosis", "Kanada Jambonu", "Tavuk Izgara", "Soğan", "Domates", "Mısır", "Sucuk", "Jalepeno", "Sarımsak", "Biber", "Ananas", "Kabak"];
@@ -161,26 +161,32 @@ return (
             {errors.hamur && <p className="error-message">{errors.hamur}</p>}
           </div>
           <div className='content-container'>
-            {malzemeler.map((malz, index) => (
-              <FormGroup key={index}>
-                <Input id={malz} name="malzeme" type="checkbox" onChange={handleChange} checked={formData.malzeme.includes(malz)} />
-                <Label htmlFor={malz}>{malz}</Label>
-              </FormGroup>
-            ))}
-            {errors.malzeme && <p className="error-message">{errors.malzeme}</p>}
-          </div>
+  <h6>Ekstra Malzemeler</h6>
+  <Row>
+    {malzemeler.map((malz, index) => (
+      <Col key={index}  sm="6"> 
+        <FormGroup>
+          <Input
+            id={malz}
+            name="malzeme"
+            type="checkbox"
+            onChange={handleChange}
+            checked={formData.malzeme.includes(malz)}
+          />
+          <Label htmlFor={malz}>{malz}</Label>
+        </FormGroup>
+      </Col>
+    ))}
+  </Row>
+  {errors.malzeme && <p className="error-message">{errors.malzeme}</p>}
+</div>
           <div className='content-container'>
             <FormGroup>
               <Label>Sipariş Notu</Label>
               <Input name="not" type="textarea" placeholder="Siparişinize eklemek istediğiniz bir not var mı?" onChange={handleChange} value={formData.not} />
             </FormGroup>
           </div>
-          <div className='flex between'>
-            <ButtonGroup>
-            <Button onClick={decreaseQuantity}>-</Button>
-              <Button disabled>{quantity}</Button>
-              <Button onClick={increaseQuantity}>+</Button>
-            </ButtonGroup>
+        
 
             <div className='content-container'>
               <h2>Sipariş Toplamı</h2>
@@ -195,7 +201,14 @@ return (
             <p>{totalPrice}₺</p>
          </div>
       </div>
-            <Button onClick={handleSubmit} disabled={!isValid}>SİPARİŞ VER</Button>
+      <div className='flex between'>
+            <ButtonGroup>
+            <Button onClick={decreaseQuantity}>-</Button>
+              <Button disabled>{quantity}</Button>
+              <Button onClick={increaseQuantity}>+</Button>
+              <Button onClick={handleSubmit} disabled={!isValid}>SİPARİŞ VER</Button>
+            </ButtonGroup>
+            
           </div>
         </div>
       </main>
